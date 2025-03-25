@@ -1,10 +1,16 @@
 source https://api.nuget.org/v3/index.json
 
 storage: none
-nuget FluentAssertions 8.0.1
-nuget Microsoft.NET.Test.Sdk 17.12.0
-nuget NSubstitute 5.3.0
-nuget NUnit 4.3.2
-nuget System.IO.Abstractions 21.3.1
-nuget System.IO.Abstractions.TestingHelpers 21.3.1
+nuget Microsoft.Extensions.Configuration
+nuget Microsoft.Extensions.DependencyInjection
+nuget Microsoft.Extensions.Hosting
+nuget Microsoft.Extensions.Logging
+nuget Microsoft.Extensions.Options
+nuget Microsoft.VisualStudio.Threading
+nuget Refit
+nuget Refit.HttpClientFactory
+nuget FluentAssertions
+nuget Microsoft.NET.Test.Sdk
+nuget NSubstitute
+nuget NUnit
 nuget NUnit3TestAdapter

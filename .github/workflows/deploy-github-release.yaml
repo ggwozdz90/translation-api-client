@@ -24,16 +24,19 @@ jobs:
       - name: Restore .NET tools
         run: dotnet tool restore
 
-      - name: Create dll
-        run: |
-          dotnet publish src/Example/Example.csproj \
-            --configuration Release \
-            --output publish
+      - name: Create NuGet package
+        run: dotnet pack --configuration Release --output release
 
-      - name: Zip dll
+      - name: Add GitHub NuGet repository
         run: |
-          mkdir -p release
-          zip -r -j release/example.zip publish/
+          dotnet nuget add source \
+            --username ${{ github.repository_owner }} \
+            --password ${{ secrets.REPOSITORY_TOKEN }} \
+            --store-password-in-clear-text \
+            --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+
+      - name: Push NuGet package to GitHub
+        run: dotnet nuget push "release/*.nupkg" --source github  --api-key ${{ secrets.REPOSITORY_TOKEN }}
 
       - name: Deploy GitHub Release
         uses: softprops/action-gh-release@v2
