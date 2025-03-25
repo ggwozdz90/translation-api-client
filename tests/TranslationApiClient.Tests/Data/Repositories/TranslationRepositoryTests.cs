@@ -39,9 +39,14 @@ namespace TranslationApiClient.Tests.Data.Repositories
             const string sourceLanguage = "en";
             const string targetLanguage = "fr";
             const string expectedTranslation = "Translation result";
-            translationRemoteDataSource
-                .TranslateAsync(textToTranslate, sourceLanguage, targetLanguage)
-                .Returns(expectedTranslation);
+            var requestBody = new TranslationRequestDto
+            {
+                TextToTranslate = textToTranslate,
+                SourceLanguage = sourceLanguage,
+                TargetLanguage = targetLanguage,
+            };
+            var responseDto = new TranslationDto(expectedTranslation);
+            translationRemoteDataSource.TranslateAsync(requestBody).Returns(responseDto);
 
             // When
             var result = await repository
@@ -59,9 +64,13 @@ namespace TranslationApiClient.Tests.Data.Repositories
             const string textToTranslate = "test";
             const string sourceLanguage = "en";
             const string targetLanguage = "fr";
-            translationRemoteDataSource
-                .TranslateAsync(textToTranslate, sourceLanguage, targetLanguage)
-                .ThrowsAsync(new HttpRequestException());
+            var requestBody = new TranslationRequestDto
+            {
+                TextToTranslate = textToTranslate,
+                SourceLanguage = sourceLanguage,
+                TargetLanguage = targetLanguage,
+            };
+            translationRemoteDataSource.TranslateAsync(requestBody).ThrowsAsync(new HttpRequestException());
 
             // When
             Func<Task> act = async () =>
@@ -69,10 +78,7 @@ namespace TranslationApiClient.Tests.Data.Repositories
 
             // Then
             await act.Should().ThrowAsync<NetworkException>().ConfigureAwait(false);
-            await translationRemoteDataSource
-                .Received(1)
-                .TranslateAsync(textToTranslate, sourceLanguage, targetLanguage)
-                .ConfigureAwait(false);
+            await translationRemoteDataSource.Received(1).TranslateAsync(requestBody).ConfigureAwait(false);
         }
 
         [Test]
@@ -82,14 +88,18 @@ namespace TranslationApiClient.Tests.Data.Repositories
             const string textToTranslate = "test";
             const string sourceLanguage = "en";
             const string targetLanguage = "fr";
+            var requestBody = new TranslationRequestDto
+            {
+                TextToTranslate = textToTranslate,
+                SourceLanguage = sourceLanguage,
+                TargetLanguage = targetLanguage,
+            };
             using var httpRequestMessage = new HttpRequestMessage();
             using var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
             var exception = await ApiException
                 .Create(httpRequestMessage, HttpMethod.Post, httpResponseMessage, new RefitSettings())
                 .ConfigureAwait(false);
-            translationRemoteDataSource
-                .TranslateAsync(textToTranslate, sourceLanguage, targetLanguage)
-                .ThrowsAsync(exception);
+            translationRemoteDataSource.TranslateAsync(requestBody).ThrowsAsync(exception);
 
             // When
             Func<Task> act = async () =>
@@ -97,10 +107,7 @@ namespace TranslationApiClient.Tests.Data.Repositories
 
             // Then
             await act.Should().ThrowAsync<TranslationException>().ConfigureAwait(false);
-            await translationRemoteDataSource
-                .Received(1)
-                .TranslateAsync(textToTranslate, sourceLanguage, targetLanguage)
-                .ConfigureAwait(false);
+            await translationRemoteDataSource.Received(1).TranslateAsync(requestBody).ConfigureAwait(false);
         }
 
         [Test]

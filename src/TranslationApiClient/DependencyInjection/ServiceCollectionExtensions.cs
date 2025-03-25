@@ -37,7 +37,7 @@ public static class ServiceCollectionExtensions
 
     private static void AddDataLayer(this IServiceCollection services, IConfiguration configuration)
     {
-        var apiBaseAddress = configuration.GetValue("Translation:BaseAddress", "http://localhost:8000");
+        var apiBaseAddress = configuration.GetValue("Translation:BaseAddress", "http://localhost:9003");
         var translateRouteTimeout = configuration.GetValue("Translation:TranslateRouteTimeout", 300);
         var healthCheckRouteTimeout = configuration.GetValue("Translation:HealthCheckRouteTimeout", 10);
 

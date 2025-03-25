@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Refit;
 using TranslationApiClient.Data.DataSources;
+using TranslationApiClient.Data.DTOs;
 using TranslationApiClient.Domain.Exceptions;
 using TranslationApiClient.Domain.Repositories;
 
@@ -23,11 +24,16 @@ internal sealed class TranslationRepository(
 
         try
         {
-            var result = await translationRemoteDataSource
-                .TranslateAsync(textToTranslate, sourceLanguage, targetLanguage)
-                .ConfigureAwait(false);
+            var requestBody = new TranslationRequestDto()
+            {
+                TextToTranslate = textToTranslate,
+                SourceLanguage = sourceLanguage,
+                TargetLanguage = targetLanguage,
+            };
 
-            return result;
+            var result = await translationRemoteDataSource.TranslateAsync(requestBody).ConfigureAwait(false);
+
+            return result.Translation;
         }
         catch (HttpRequestException httpEx)
         {
