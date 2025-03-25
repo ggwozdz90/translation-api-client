@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <Version>0.1.0</Version>
+    <Title>Translation API Client</Title>
+    <Authors>Grzegorz Gwóźdź</Authors>
+    <Description>
+      A client library for the Translation API, providing a simple and efficient interface 
+      to interact with the API endpoints. This library allows you to easily send requests 
+      and handle responses, facilitating seamless integration with the Translation service.
+    </Description>
+    <PackageProjectUrl>https://github.com/ggwozdz90/translation-api-client</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/ggwozdz90/translation-api-client</RepositoryUrl>
+  </PropertyGroup>
+  <Target Name="Husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
+    <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
+    <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="..\.." />
+  </Target>
+  <ItemGroup>
+    <None Include="..\..\docs\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
